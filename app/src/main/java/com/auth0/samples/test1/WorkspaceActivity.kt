@@ -19,7 +19,8 @@ class WorkspaceActivity : AppCompatActivity() {
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.elevation = 0f
         loadApps()
     }
 
