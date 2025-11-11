@@ -57,14 +57,22 @@ class WorkspaceActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_admin_login -> {
-                showAdminPasswordDialog()
+                showAdminPasswordDialog(item)
                 true
             }
+
+            R.id.action_admin_logout -> {
+                showAdminPasswordDialog(item)
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun showAdminPasswordDialog() {
+
+
+    private fun showAdminPasswordDialog(item: MenuItem) {
         val editText = EditText(this)
         editText.inputType = android.text.InputType.TYPE_CLASS_TEXT or
                 android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
@@ -75,8 +83,13 @@ class WorkspaceActivity : AppCompatActivity() {
             .setView(editText)
             .setPositiveButton("Entrar") { dialog, _ ->
                 val password = editText.text.toString()
+
                 if (password == "1234") {
-                    startActivity(Intent(this, AppSelectionActivity::class.java))
+                    if (item.itemId == R.id.action_admin_login){
+                        startActivity(Intent(this, AppSelectionActivity::class.java))
+                    } else if (item.itemId == R.id.action_admin_logout){
+                        finishAffinity()
+                    }
                 } else {
                     // Senha incorreta
                     android.widget.Toast.makeText(
@@ -92,6 +105,8 @@ class WorkspaceActivity : AppCompatActivity() {
             }
             .show()
     }
+
+
 
     override fun onResume() {
         super.onResume()
