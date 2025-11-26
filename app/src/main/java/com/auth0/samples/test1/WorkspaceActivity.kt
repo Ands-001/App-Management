@@ -1,5 +1,7 @@
 package com.auth0.samples.test1
 
+
+import android.app.KeyguardManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -11,17 +13,27 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.Toolbar
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
+import android.content.Context
 
 class WorkspaceActivity : AppCompatActivity() {
+    private lateinit var dpm: DevicePolicyManager
+    private lateinit var adminComponentName: ComponentName
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workspace)
+
+        dpm = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        adminComponentName = ComponentName(this, AppAdminReceiver::class.java)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.elevation = 0f
         loadApps()
+        FixScreen()
     }
 
     private fun loadApps() {
@@ -89,6 +101,7 @@ class WorkspaceActivity : AppCompatActivity() {
                         startActivity(Intent(this, AppSelectionActivity::class.java))
                     } else if (item.itemId == R.id.action_admin_logout){
                         finishAffinity()
+                        outScreen()
                     }
                 } else {
                     // Senha incorreta
@@ -106,6 +119,20 @@ class WorkspaceActivity : AppCompatActivity() {
             .show()
     }
 
+    
+    private fun FixScreen(){
+        startLockTask()
+    }
+
+    fun outScreen(){
+        stopLockTask()
+
+        if (dpm.isDeviceOwnerApp(packageName)){
+            dpm.setStatusBarDisabled(adminComponentName, false)
+        }else if (dpm.isDeviceOwnerApp(packageName)){
+            dpm.setLockTaskPackages(adminComponentName, arrayOf())
+        }
+    }
 
 
     override fun onResume() {
