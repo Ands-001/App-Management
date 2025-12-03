@@ -53,6 +53,7 @@ class WorkspaceActivity : AppCompatActivity() {
             onAppClick = { app, _ ->
                 val intent = pm.getLaunchIntentForPackage(app.packageName)
                 if (intent != null) {
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                 }
             },
@@ -100,7 +101,6 @@ class WorkspaceActivity : AppCompatActivity() {
                     if (item.itemId == R.id.action_admin_login){
                         startActivity(Intent(this, AppSelectionActivity::class.java))
                     } else if (item.itemId == R.id.action_admin_logout){
-                        finishAffinity()
                         outScreen()
                     }
                 } else {
@@ -129,9 +129,12 @@ class WorkspaceActivity : AppCompatActivity() {
 
         if (dpm.isDeviceOwnerApp(packageName)){
             dpm.setStatusBarDisabled(adminComponentName, false)
-        }else if (dpm.isDeviceOwnerApp(packageName)){
+        }
+
+        if (dpm.isDeviceOwnerApp(packageName)){
             dpm.setLockTaskPackages(adminComponentName, arrayOf())
         }
+        finishAffinity();
     }
 
 
