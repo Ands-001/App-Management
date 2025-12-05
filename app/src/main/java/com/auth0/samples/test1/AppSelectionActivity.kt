@@ -15,7 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import android.content.Intent // Adicionado import para Intent
 
 class AppSelectionActivity : AppCompatActivity() {
     private lateinit var selectedApps: MutableSet<String>
@@ -48,6 +48,11 @@ class AppSelectionActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val pm = packageManager
+
+        // =====================================================================================
+        // OPÇÃO 1: MOSTRA APENAS APPS DE USUÁRIO (ESCONDE APPS DO SISTEMA)
+        // Use esta opção se quiser esconder Câmera, Calculadora, Configurações, etc.
+        /*
         allApps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
             .filter {appInfo ->
                 (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0 ||
@@ -55,6 +60,24 @@ class AppSelectionActivity : AppCompatActivity() {
             }
             .filter { it.packageName != packageName }
             .sortedBy { it.loadLabel(pm).toString().lowercase() }
+        */
+        // =====================================================================================
+
+
+        // =====================================================================================
+        // OPÇÃO 2: MOSTRA TODOS OS APPS QUE PODEM SER ABERTOS (SISTEMA + USUÁRIO)
+        // Use esta opção para ver e selecionar qualquer app que tenha ícone (Launcher).
+        
+        val mainIntent = Intent(Intent.ACTION_MAIN, null)
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+        
+        allApps = pm.queryIntentActivities(mainIntent, 0)
+            .map { it.activityInfo.applicationInfo }
+            .filter { it.packageName != packageName } // Remove o próprio app da lista
+            .distinctBy { it.packageName } // Remove duplicatas caso existam
+            .sortedBy { it.loadLabel(pm).toString().lowercase() }
+
+        // =====================================================================================
 
         adapter = AppAdapter(
             apps = allApps,

@@ -47,6 +47,13 @@ class WorkspaceActivity : AppCompatActivity() {
         val apps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
             .filter { selectedApps.contains(it.packageName) }
 
+        // Libera os apps selecionados
+        if (dpm.isDeviceOwnerApp(packageName)) {
+            val allowedApps = selectedApps.toMutableSet()
+            allowedApps.add(packageName) // Importante: Manter o próprio app na lista
+            dpm.setLockTaskPackages(adminComponentName, allowedApps.toTypedArray())
+        }
+        
         val adapter = AppAdapter(
             apps = apps,
             selectedApps = mutableSetOf(),
