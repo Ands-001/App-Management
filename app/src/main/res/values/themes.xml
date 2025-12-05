@@ -3,6 +3,7 @@
     <style name="Base.Theme.Test1" parent="Theme.Material3.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="Theme.Test1" parent="Base.Theme.Test1" />
