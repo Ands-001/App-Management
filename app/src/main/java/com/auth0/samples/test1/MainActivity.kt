@@ -4,6 +4,7 @@ import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,13 @@ class MainActivity : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+        if(dpm.isDeviceOwnerApp(packageName)){
+            val filter = IntentFilter(Intent.ACTION_MAIN).apply{
+                addCategory(Intent.CATEGORY_HOME)
+                addCategory(Intent.CATEGORY_DEFAULT)
+            }
+             dpm.addPersistentPreferredActivity(adminComponentName, filter, ComponentName(packageName, MainActivity::class.java.name))
+        }
 
         startActivity(Intent(this, WorkspaceActivity::class.java))
         finish()
@@ -29,21 +37,23 @@ class MainActivity : AppCompatActivity() {
     override fun onResume(){
         super.onResume()
 
-        if(!dpm.isLockTaskPermitted(packageName)){
-            return
+        try {
+            if(dpm.isLockTaskPermitted(packageName)){
+                startKiskMode()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        startKiskMode()
     }
 
 
 
     private fun startKiskMode(){
-        dpm.setStatusBarDisabled(adminComponentName, true)
-
         if (dpm.isDeviceOwnerApp(packageName)){
+            dpm.setStatusBarDisabled(adminComponentName, true)
             dpm.setLockTaskPackages(adminComponentName, arrayOf(packageName))
         }
-
+        
         startLockTask()
     }
 
