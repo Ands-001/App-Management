@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         startKiskMode()
     }
 
+
+
     private fun startKiskMode(){
         dpm.setStatusBarDisabled(adminComponentName, true)
 
