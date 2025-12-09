@@ -96,9 +96,14 @@ class WorkspaceActivity : AppCompatActivity() {
         val editText = EditText(this)
         editText.inputType = android.text.InputType.TYPE_CLASS_TEXT or
                 android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+        editText.setTextColor(android.graphics.Color.BLACK)
+        val padding = (16 * resources.displayMetrics.density).toInt()
+        editText.setPadding(padding, padding, padding, padding)
 
-        AlertDialog.Builder(this)
-            .setTitle("Acesso Administrativo")
+        val builder = AlertDialog.Builder(this, androidx.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert)
+
+
+        builder.setTitle("Acesso Administrativo")
             .setMessage("Digite a senha")
             .setView(editText)
             .setPositiveButton("Entrar") { dialog, _ ->
@@ -111,7 +116,6 @@ class WorkspaceActivity : AppCompatActivity() {
                         outScreen()
                     }
                 } else {
-                    // Senha incorreta
                     android.widget.Toast.makeText(
                         this,
                         "Senha incorreta",
@@ -123,8 +127,12 @@ class WorkspaceActivity : AppCompatActivity() {
             .setNegativeButton("Cancelar") { dialog, _ ->
                 dialog.dismiss()
             }
-            .show()
+        val dialog = builder.create()
+        dialog.show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(android.graphics.Color.BLACK)
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(android.graphics.Color.BLACK)
     }
+
 
     
     private fun FixScreen(){

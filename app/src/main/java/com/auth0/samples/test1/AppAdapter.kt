@@ -23,8 +23,9 @@ class AppAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder {
+        // Usa o layout de grade se useGridLayout for true, senão usa o layout de lista padrão
         val layoutId = if (useGridLayout) {
-            R.layout.item_app_workspace
+            R.layout.item_app_grid
         } else {
             R.layout.item_app
         }
@@ -39,8 +40,13 @@ class AppAdapter(
         holder.icon.setImageDrawable(app.loadIcon(pm))
         holder.name.text = app.loadLabel(pm).toString()
 
+        // Configura o CheckBox apenas se ele estiver visível/necessário (modo lista)
         holder.checkBox?.let { checkbox ->
+            // Remove o listener antigo para evitar chamadas indesejadas durante a reciclagem
+            checkbox.setOnCheckedChangeListener(null)
+            
             checkbox.isChecked = selectedApps.contains(app.packageName)
+            
             checkbox.setOnCheckedChangeListener { _, isChecked ->
                 onAppClick(app, isChecked)
             }
@@ -48,8 +54,10 @@ class AppAdapter(
 
         holder.itemView.setOnClickListener {
             if (useGridLayout) {
+                // No modo grade, o clique abre o app (ignora o checkbox)
                 onAppClick(app, false)
             } else {
+                // No modo lista, o clique alterna o checkbox
                 holder.checkBox?.let {
                     it.isChecked = !it.isChecked
                 }

@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary_blue">#3B82F6</color>
+    <color name="primary_blue_dark">#1D4ED8</color>
 
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
+    <color name="background_night">#0F172A</color>
+
+    <color name="surface_night">#1E293B</color>
+
     <color name="white">#FFFFFFFF</color>
-    <color name="azul_claro">#FF2196F3</color>
-    <color name="azul_escuro">#FF1976D2</color>
-    <color name="verde_claro">#FF4CAF50</color>
-    <color name="verde_escuro">#FF388E3C</color>
-    <color name="vermelho_claro">#FFF44336</color>
-    <color name="vermelho_escuro">#FFD32F2F</color>
-    <color name="laranja_claro">#FFFF9800</color>
-    <color name="laranja_escuro">#FFF57C00</color>
-    <color name="cinza_claro">#FFE0E0E0</color>
-    <color name="cinza_medio">#FF9E9E9E</color>
-    <color name="cinza_escuro">#FF616161</color>
-    <color name="grafite">#2E2E2E</color>
-    <color name="transparente">#00000000</color>
+    <color name="text_secondary">#94A3B8</color> <color name="text_hint">#64748B</color>
+
+    <color name="red_error">#EF4444</color>
+    <color name="green_success">#10B981</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="colorPrimary">@color/primary_blue</color>
+    <color name="colorOnPrimary">@color/white</color>
+    <color name="colorBackground">@color/background_night</color>
 </resources>
