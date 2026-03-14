@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
+import android.widget.Toast.makeText
 
 class WorkspaceActivity : AppCompatActivity() {
     private lateinit var dpm: DevicePolicyManager
@@ -86,11 +87,14 @@ class WorkspaceActivity : AppCompatActivity() {
                 true
             }
 
+            R.id.action_admin_change_password -> {
+                showAdminPasswordDialog(item)
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-
 
     private fun showAdminPasswordDialog(item: MenuItem) {
         val editText = EditText(this)
@@ -107,13 +111,18 @@ class WorkspaceActivity : AppCompatActivity() {
             .setMessage("Digite a senha")
             .setView(editText)
             .setPositiveButton("Entrar") { dialog, _ ->
-                val password = editText.text.toString()
+                val passwordInput = editText.text.toString()
+                val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+                val correctPassword = sharedPref.getString("new_admin_password", "1234")
 
-                if (password == "1234") {
+                if (passwordInput == correctPassword) {
                     if (item.itemId == R.id.action_admin_login){
                         startActivity(Intent(this, AppSelectionActivity::class.java))
                     } else if (item.itemId == R.id.action_admin_logout){
                         outScreen()
+                    }
+                    else if (item.itemId == R.id.action_admin_change_password){
+                        startActivity(Intent(this, ChangePasswordActivity::class.java))
                     }
                 } else {
                     android.widget.Toast.makeText(
